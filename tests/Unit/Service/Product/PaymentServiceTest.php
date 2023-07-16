@@ -15,22 +15,20 @@ use PHPUnit\Framework\TestCase;
 class PaymentServiceTest extends TestCase
 {
     private PaymentService $paymentService;
-    private PaypalPayment $paypalPayment;
-    private StripePayment $stripePayment;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $paypalPaymentProcessor = new PaypalPaymentProcessor();
-        $this->paypalPayment = new PaypalPayment($paypalPaymentProcessor);
+        $paypalPayment = new PaypalPayment($paypalPaymentProcessor);
 
         $stripePaymentProcessor = new StripePaymentProcessor();
-        $this->stripePayment = new StripePayment($stripePaymentProcessor);
+        $stripePayment = new StripePayment($stripePaymentProcessor);
 
         $this->paymentService = new PaymentService(
-            $this->paypalPayment,
-            $this->stripePayment,
+            $paypalPayment,
+            $stripePayment,
         );
     }
 
