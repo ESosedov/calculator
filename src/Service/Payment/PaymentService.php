@@ -4,6 +4,7 @@ namespace App\Service\Payment;
 
 use App\Entity\Product;
 use App\Exception\CalculateException;
+use App\Exception\PayException;
 use App\Service\Payment\Interface\PaymentInterface;
 use Exception;
 
@@ -11,6 +12,10 @@ class PaymentService
 {
     public const COUPON_TYPE_FIX = 'F';
     public const COUPON_TYPE_DISCOUNT ='D';
+    public const COUPON_TYPES = [
+        self::COUPON_TYPE_FIX,
+        self::COUPON_TYPE_DISCOUNT,
+    ];
     public const TAX_PERCENT_GERMANY = 19;
     public const TAX_PERCENT_ITALY = 22;
     public const TAX_PERCENT_FRANCE = 20;
@@ -22,14 +27,44 @@ class PaymentService
         'GR' => self::TAX_PERCENT_GREECE,
         'FR' => self::TAX_PERCENT_FRANCE,
     ];
-    public function __construct(private PaymentInterface $payment)
-    {
+
+    public const PAYMENT_PROCESSOR_PAYPAL = 'paypal';
+    public const PAYMENT_PROCESSOR_STRIPE = 'stripe';
+    public const PAYMENT_PROCESSORS = [
+        self::PAYMENT_PROCESSOR_PAYPAL,
+        self::PAYMENT_PROCESSOR_STRIPE,
+    ];
+
+    public function __construct(
+        private PaypalPayment $paypalPayment,
+        private StripePayment $stripePayment,
+    ) {
     }
 
-    public function pay(): void
+    /**
+     * @throws PayException
+     * @throws CalculateException
+     */
+    public function pay(
+        Product $product,
+        string $taxNumber,
+        string $paymentProcessor,
+        ?string $couponCode,
+    ): void
     {
-        $cost = $this->calculateCost();
-        $this->payment->pay($cost);
+        $cost = $this->calculateCost(
+            $product,
+            $taxNumber,
+            $couponCode,
+        );
+
+        $paymentMethod = $this->paymentMethodChoices($paymentProcessor);
+
+        try {
+            $paymentMethod->pay($cost);
+        } catch (Exception $exception) {
+            throw new PayException($exception->getMessage());
+        }
     }
     public function calculateCost(
         Product $product,
@@ -59,8 +94,16 @@ class PaymentService
         $taxPercent = self::COUNTRY_TAX_MAP[$taxCountry];
         $costWithDiscount = $cost - $discount;
         $tax = ($costWithDiscount * $taxPercent / 100);
-        $costTotalEuro = round(($costWithDiscount + $tax)  / 100, 2);
+        $costTotal = $costWithDiscount + $tax;
 
-        return $costTotalEuro;
+        return $costTotal;
+    }
+
+    private function paymentMethodChoices(string $paymentProcessor): PaymentInterface
+    {
+        return  match ($paymentProcessor) {
+            self::PAYMENT_PROCESSOR_PAYPAL => $this->paypalPayment,
+            self::PAYMENT_PROCESSOR_STRIPE => $this->stripePayment,
+        };
     }
 }

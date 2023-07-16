@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit\Service;
+namespace App\Tests\Unit\Service\Product;
 
 use App\Entity\Product;
 use App\Exception\CalculateException;
