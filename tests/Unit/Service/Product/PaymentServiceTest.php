@@ -4,20 +4,34 @@ namespace App\Tests\Unit\Service\Product;
 
 use App\Entity\Product;
 use App\Exception\CalculateException;
-use App\Service\Payment\Interface\PaymentInterface;
+use App\Exception\PayException;
+use App\Service\Payment\PaymentProcessor\PaypalPaymentProcessor;
+use App\Service\Payment\PaymentProcessor\StripePaymentProcessor;
 use App\Service\Payment\PaymentService;
+use App\Service\Payment\PaypalPayment;
+use App\Service\Payment\StripePayment;
 use PHPUnit\Framework\TestCase;
 
 class PaymentServiceTest extends TestCase
 {
     private PaymentService $paymentService;
+    private PaypalPayment $paypalPayment;
+    private StripePayment $stripePayment;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $payment = $this->createMock(PaymentInterface::class);
-        $this->paymentService = new PaymentService($payment);
+        $paypalPaymentProcessor = new PaypalPaymentProcessor();
+        $this->paypalPayment = new PaypalPayment($paypalPaymentProcessor);
+
+        $stripePaymentProcessor = new StripePaymentProcessor();
+        $this->stripePayment = new StripePayment($stripePaymentProcessor);
+
+        $this->paymentService = new PaymentService(
+            $this->paypalPayment,
+            $this->stripePayment,
+        );
     }
 
     /**
@@ -29,6 +43,7 @@ class PaymentServiceTest extends TestCase
         ?string $couponCode,
         float $costExpected,
     ): void {
+
         $costTotalEuro = $this->paymentService->calculateCost(
             $product,
             $taxNumber,
@@ -57,6 +72,21 @@ class PaymentServiceTest extends TestCase
         );
     }
 
+    public function testPay(): void {
+        $product = new Product();
+        $product->setCost(10000);
+
+        $this->expectException(PayException::class);
+        $this->expectExceptionMessage('Too high price');
+
+        $this->paymentService->pay(
+            $product,
+            'GR123456789',
+            'paypal',
+            null,
+        );
+    }
+
     public function calculateSuccessProvider(): array
     {
         $product = new Product();
@@ -67,25 +97,25 @@ class PaymentServiceTest extends TestCase
                 $product,
                 'DE123456789',
                 'D15',
-                101.15,
+                10115,
             ],
             [
                 $product,
                 'IT12345678901',
                 'F50',
-                61.00,
+                6100,
             ],
             [
                 $product,
                 'FRFJ1234567',
                 null,
-                120.00,
+                12000,
             ],
             [
                 $product,
                 'GR123456789',
                 'D50',
-                62.00
+                6200
             ]
         ];
     }

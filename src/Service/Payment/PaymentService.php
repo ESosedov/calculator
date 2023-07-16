@@ -50,8 +50,7 @@ class PaymentService
         string $taxNumber,
         string $paymentProcessor,
         ?string $couponCode,
-    ): void
-    {
+    ): void {
         $cost = $this->calculateCost(
             $product,
             $taxNumber,
@@ -70,8 +69,7 @@ class PaymentService
         Product $product,
         string $taxNumber,
         ?string $couponCode,
-    ): float
-    {
+    ): int {
         $cost = $product->getCost();
         if (null === $cost) {
             throw new Exception('В настоящий момент невозможно рассчитать стоимость товара');
