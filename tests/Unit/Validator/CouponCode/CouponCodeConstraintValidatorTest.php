@@ -28,7 +28,7 @@ class CouponCodeConstraintValidatorTest extends TestCase
         $this->validator->initialize($this->executionContextMock);
     }
 
-    public function testSuccessValidation():void
+    public function testCouponCodeSuccessValidation(): void
     {
         $this->executionContextMock
             ->expects(self::never())
@@ -37,7 +37,7 @@ class CouponCodeConstraintValidatorTest extends TestCase
         $this->validator->validate('F10', new CouponCodeConstraint());
     }
 
-    public function testCouponTypeError(): void
+    public function testCouponTypeErrorValidation(): void
     {
         $this->executionContextMock
             ->expects(self::once())

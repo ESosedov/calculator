@@ -34,6 +34,7 @@ class PaymentService
         self::PAYMENT_PROCESSOR_PAYPAL,
         self::PAYMENT_PROCESSOR_STRIPE,
     ];
+    public const TAX_NUMBER_PATTERN = '/^((DE[0-9]{9})|(IT[0-9]{11})|(GR[0-9]{9})|(FR[A-Za-z]{2}[0-9]{9}))$/';
 
     public function __construct(
         private PaypalPayment $paypalPayment,
