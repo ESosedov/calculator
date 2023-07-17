@@ -4,7 +4,7 @@ namespace App\Controller\Api\Product\Pay;
 
 use App\Controller\Api\ApiController;
 use App\Controller\Api\Product\Pay\DTO\ProductPayDTO;
-use App\Form\Product\PayProductForm;
+use App\Form\Product\PayForm;
 use App\Service\Payment\PaymentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ class PayAction extends ApiController
     public function payProduct(Request $request, PaymentService $paymentService): JsonResponse
     {
         $dto = new ProductPayDTO();
-        $form = $this->createForm(PayProductForm::class, $dto);
+        $form = $this->createForm(PayForm::class, $dto);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 

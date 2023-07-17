@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-class PayProductForm extends ProductBaseForm
+class PayForm extends ProductBaseForm
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

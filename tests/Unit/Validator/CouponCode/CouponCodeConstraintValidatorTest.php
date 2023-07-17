@@ -42,7 +42,7 @@ class CouponCodeConstraintValidatorTest extends TestCase
         $this->executionContextMock
             ->expects(self::once())
             ->method('buildViolation')
-            ->with('Некорректный код купона')
+            ->with('Invalid coupon code.')
             ->willReturn($this->constraintViolationBuilderMock);
 
         $this->constraintViolationBuilderMock
@@ -58,7 +58,7 @@ class CouponCodeConstraintValidatorTest extends TestCase
         $this->executionContextMock
             ->expects(self::once())
             ->method('buildViolation')
-            ->with('Некорректный код купона')
+            ->with('Invalid coupon code.')
             ->willReturn($this->constraintViolationBuilderMock);
 
         $this->constraintViolationBuilderMock
@@ -74,7 +74,7 @@ class CouponCodeConstraintValidatorTest extends TestCase
         $this->executionContextMock
             ->expects(self::once())
             ->method('buildViolation')
-            ->with('Некорректный код купона')
+            ->with('Invalid coupon code.')
             ->willReturn($this->constraintViolationBuilderMock);
 
         $this->constraintViolationBuilderMock

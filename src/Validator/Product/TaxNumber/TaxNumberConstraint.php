@@ -6,5 +6,5 @@ use Symfony\Component\Validator\Constraint;
 
 class TaxNumberConstraint extends Constraint
 {
-    public string $errorMessage = 'Некорректный формат налогового номера';
+    public string $errorMessage = 'Invalid tax number.';
 }

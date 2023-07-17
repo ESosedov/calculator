@@ -2,7 +2,7 @@
 
 namespace App\Validator\Product\TaxNumber;
 
-use App\Service\Payment\PaymentService;
+use App\Service\Calculate\CalculateService;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -16,7 +16,7 @@ class TaxNumberConstraintValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, TaxNumberConstraint::class);
         }
 
-        if (!preg_match(PaymentService::TAX_NUMBER_PATTERN, $value)) {
+        if (!preg_match(CalculateService::TAX_NUMBER_PATTERN, $value)) {
             $this->context->buildViolation($constraint->errorMessage)->addViolation();
         }
     }

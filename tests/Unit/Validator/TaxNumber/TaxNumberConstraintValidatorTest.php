@@ -42,7 +42,7 @@ class TaxNumberConstraintValidatorTest extends TestCase
         $this->executionContextMock
             ->expects(self::once())
             ->method('buildViolation')
-            ->with('Некорректный формат налогового номера')
+            ->with('Invalid tax number.')
             ->willReturn($this->constraintViolationBuilderMock);
 
         $this->constraintViolationBuilderMock

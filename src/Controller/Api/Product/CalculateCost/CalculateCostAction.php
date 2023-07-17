@@ -4,7 +4,7 @@ namespace App\Controller\Api\Product\CalculateCost;
 
 use App\Controller\Api\ApiController;
 use App\Controller\Api\Product\CalculateCost\DTO\ProductCalculateCostDTO;
-use App\Form\Product\CalculateProductForm;
+use App\Form\Product\CalculateCostForm;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ class CalculateCostAction extends ApiController
     public function calculateCost(Request $request, Handler $handler): JsonResponse
     {
         $dto = new ProductCalculateCostDTO();
-        $form = $this->createForm(CalculateProductForm::class, $dto);
+        $form = $this->createForm(CalculateCostForm::class, $dto);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 

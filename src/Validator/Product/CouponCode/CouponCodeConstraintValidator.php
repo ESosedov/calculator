@@ -2,7 +2,7 @@
 
 namespace App\Validator\Product\CouponCode;
 
-use App\Service\Payment\PaymentService;
+use App\Service\Calculate\CalculateService;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -21,7 +21,7 @@ class CouponCodeConstraintValidator extends ConstraintValidator
         }
 
         $couponDiscountType = $value[0];
-        if (!in_array($couponDiscountType, PaymentService::COUPON_TYPES, true)) {
+        if (!in_array($couponDiscountType, CalculateService::COUPON_TYPES, true)) {
             $this->context->buildViolation($constraint->errorMessage)->addViolation();
 
             return;
@@ -34,7 +34,7 @@ class CouponCodeConstraintValidator extends ConstraintValidator
             return;
         }
 
-        if (PaymentService::COUPON_TYPE_DISCOUNT === $couponDiscountType
+        if (CalculateService::COUPON_TYPE_DISCOUNT === $couponDiscountType
             && 99 < (int) $couponValue) {
             $this->context->buildViolation($constraint->errorMessage)->addViolation();
         }

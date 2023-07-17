@@ -5,7 +5,7 @@ namespace App\Form\Product;
 use App\Controller\Api\Product\CalculateCost\DTO\ProductCalculateCostDTO;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CalculateProductForm extends ProductBaseForm
+class CalculateCostForm extends ProductBaseForm
 {
     /**
      * {@inheritdoc}
