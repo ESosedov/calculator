@@ -1,49 +1,43 @@
 <?php
 
-namespace App\Form\Product\Trait;
+namespace App\Form\Product;
 
 use App\Entity\Product;
-use App\Service\Payment\PaymentService;
+use App\Form\ApiForm;
 use App\Validator\Product\CouponCode\CouponCodeConstraint;
 use App\Validator\Product\TaxNumber\TaxNumberConstraint;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-trait ProductFormTrait
+Class ProductBaseForm extends ApiForm
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
         $builder
-            ->add('product',EntityType::class,[
+            ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'constraints' => [
                     new NotNull(),
-                ]
+                ],
             ])
             ->add('taxNumber', TextType::class, [
-                'constraint' => [
+                'constraints' => [
                     new NotNull(),
                     new TaxNumberConstraint(),
                 ],
             ])
-            ->add('couponCode',  TextType::class, [
-                'constraint' => [
+            ->add('couponCode', TextType::class, [
+                'constraints' => [
                     new Length([
                         'min' => 2,
-                        ]),
+                    ]),
                     new CouponCodeConstraint(),
-                ]
-            ])
-            ->add('paymentProcessor', ChoiceType::class, [
-                'choices' => PaymentService::PAYMENT_PROCESSORS,
-                'constraint' => [
-
-                ]
+                ],
             ]);
     }
 }

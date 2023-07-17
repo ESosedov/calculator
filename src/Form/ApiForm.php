@@ -19,12 +19,4 @@ abstract class ApiForm extends AbstractType
             ],
         );
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getBlockPrefix()
-    {
-        return '';
-    }
 }

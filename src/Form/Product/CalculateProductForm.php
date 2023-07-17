@@ -2,10 +2,19 @@
 
 namespace App\Form\Product;
 
-use App\Form\ApiForm;
-use App\Form\Product\Trait\ProductFormTrait;
+use App\Controller\Api\Product\CalculateCost\DTO\ProductCalculateCostDTO;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CalculateProductForm extends ApiForm
+class CalculateProductForm extends ProductBaseForm
 {
-    use ProductFormTrait;
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        parent::configureOptions($resolver);
+        $resolver->setDefaults([
+            'data_class' => ProductCalculateCostDTO::class,
+        ]);
+    }
 }
